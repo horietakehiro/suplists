@@ -29,6 +29,10 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
     # server_thread_class = MyThreat
     def setUp(self):
+        staging_server = os.environ.get('STAGING_SERVER')
+        if staging_server:
+            self.my_live_server_url = 'http://' + staging_server
+        
         self.driver = webdriver.Remote(
             command_executor=f'http://{addr}/wd/hub',
             options=option,
