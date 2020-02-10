@@ -34,10 +34,11 @@ def new_list(request):
     try:
         item.full_clean()
         item.save()
+        return redirect(list_)
     except ValidationError:
         list_.delete()
         error = "You can't have an empty list item"
         return render(request, 'home.html', {'error' : error})
 
-    return redirect(f'/lists/{list_.id}/')
+    # return redirect(f'/lists/{list_.id}/')
 
