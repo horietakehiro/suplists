@@ -25,7 +25,7 @@ class LayoutAndStylingTest(FunctionalTest):
         self.driver.set_window_size(1024, 768)
 
         # She notices the input box is nicely centered
-        inputbox = self.driver.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         self.assertAlmostEqual(
             inputbox.location['x'] + inputbox.size['width'] / 2,
             512,
@@ -38,7 +38,7 @@ class LayoutAndStylingTest(FunctionalTest):
         inputbox.send_keys('testing')
         inputbox.send_keys(Keys.ENTER)
         self.wait_for_row_in_list_rable('1: testing')
-        inputbox = self.driver.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         self.assertAlmostEqual(
             inputbox.location['x'] + inputbox.size['width'] / 2,
             512,
