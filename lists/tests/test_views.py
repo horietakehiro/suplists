@@ -8,73 +8,11 @@ from lists.models import Item, List
 
 # Create your tests here.
 class HomePageTest(TestCase):
-    # def test_root_url_resolves_to_home_page_view(self):
-    #     found = resolve('/')
-    #     self.assertEqual(found.func, home_page)
-
-    # def test_home_page_returns_correct_html(self):
-    #     # request = HttpRequest()
-    #     # response = home_page(request)
-    #     response = self.client.get('/')
-    #     html = response.content.decode('utf8')
-
-    #     self.assertTrue(html.startswith('<html>'))
-    #     self.assertIn('<title>To-Do lists</title>', html)
-    #     self.assertTrue(html.endswith('</html>'))
-
-    #     self.assertTemplateUsed(response, 'home.html')
-
 
     def test_uses_home_templates(self):
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'home.html')
         # self.assertEqual(response['location'], '/')
-
-
-    # def test_only_saves_items_when_necessary(self):
-    #     self.client.get('/')
-    #     self.assertEqual(Item.objects.count(), 0)
-
-
-    # def test_display_all_list_items(self):
-    #     Item.objects.create(text='itemey 1')
-    #     Item.objects.create(text='itemey 2')
-
-    #     response = self.client.get('/')
-    #     self.assertIn('itemey 1', response.content.decode())
-    #     self.assertIn('itemey 2', response.content.decode())
-
-
-
-class ListAndItemModelTest(TestCase):
-
-    def test_saving_and_retrieving_items(self):
-        list_ = List()
-        list_.save()
-
-        first_item = Item()
-        first_item.text = 'The first (ever) list item'
-        first_item.list = list_
-        first_item.save()
-
-        second_item = Item()
-        second_item.text = 'Item the second'
-        second_item.list = list_
-        second_item.save()
-
-        saved_list = List.objects.first()
-        self.assertEqual(saved_list, list_)
-
-        saved_items = Item.objects.all()
-        self.assertEqual(saved_items.count(), 2)
-
-        first_saved_item = saved_items[0]
-        second_saved_item = saved_items[1]
-        self.assertEqual(first_saved_item.text, 'The first (ever) list item')
-        self.assertEqual(first_saved_item.list, list_)
-        self.assertEqual(second_saved_item.text, 'Item the second')
-        self.assertEqual(second_saved_item.list, list_)
-
 
 class ListViewTest(TestCase):
     def test_uses_list_template(self):
