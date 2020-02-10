@@ -24,16 +24,37 @@ class ItemValidationTest(FunctionalTest):
     def test_cannnot_add_empty_list_items(self):
         # Edith goes the home page and accidentlly tries to submit 
         # an empty list item. She hits Enter on the empty input box
+        self.driver.get(self.my_live_server_url)
+        self.driver.find_element_by_id('id_new_item').send_keys(Keys.ENTER)
+
 
         # The home page refreshes, and there is an erro message saying
         # that list items cannot be blank
+        self.wait_for(lambda: self.assertEqual(
+            self.driver.find_element_by_css_selector('.has-error').text,
+            "You can't have an empty list item"
+        ))
+
 
         # She tries agein with some text for the item, which now works
+        self.driver.find_element_by_id('id_new_item').send_keys('Buy milk')
+        self.driver.find_element_by_id('id_new_item').send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_rable('1: Buy milk')
 
         # Perversely, she now decides to submit a second blank lists item
+        self.driver.find_element_by_id('id_new_item').send_keys(Keys.ENTER)
 
         # SHe receives a similar warning on the list page
+        self.wait_for(lambda: self.assertEqual(
+            self.driver.find_element_by_css_selector('.has-error').text,
+            "You can't have an empty list item"
+        ))
 
         # And she can correct it by filling some text in 
+        self.driver.find_element_by_id('id_new_item').send_keys('Make tea')
+        self.driver.find_element_by_id('id_new_item').send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_rable('1: Buy milk')
+        self.wait_for_row_in_list_rable('2: Make tea')
 
-        self.fail('white me!')
+
+        self.fail('finish the test!')

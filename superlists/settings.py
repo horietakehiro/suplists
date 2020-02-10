@@ -29,7 +29,7 @@ if 'DJANGO_DEBUG_FALSE' in os.environ:
 else:
     DEBUG = True
     SECRET_KEY = 'insecure-key-for-dev'
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ['*']
 
 # SECRET_KEY = '$rg-nk07q(jlt0dl=2riw$+!fyhly9&1xkuyfvxdx)2a96e@0y'
 # # SECURITY WARNING: don't run with debug turned on in production!
