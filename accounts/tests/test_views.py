@@ -2,6 +2,8 @@ from django.test import TestCase
 import accounts.views
 from unittest.mock import patch
 
+from accounts.models import Token
+
 class SendLoginEmailTest(TestCase):
     def test_redirects_to_home_page(self):
         response = self.client.post('/accounts/send_login_email', data={
@@ -12,13 +14,6 @@ class SendLoginEmailTest(TestCase):
 
     @patch('accounts.views.send_mail')
     def test_sends_mail_to_address_from_post(self, mock_send_mail):
-        
-        # def fake_send_maail(subject, body, from_emial, to_list):
-        #     self.send_mail_called = True
-        #     self.subject = subject
-        #     self.body = body
-        #     self.from_email = from_emial
-        #     self.to_list = to_list
 
         self.client.post('/accounts/send_login_email', data={
             'email' : 'edith@example.com',
@@ -44,4 +39,28 @@ class SendLoginEmailTest(TestCase):
         )
         self.assertEqual(message.tags, 'success')
 
+
+    def test_creates_token_assocated_with_email(self):
+        self.client.post('/accounts/send_login_email', data={
+            'email' : 'edith@example.com',
+        })
+        token = Token.objects.first()
+        self.assertEqual(token.email, 'edith@example.com')
+
+    @patch('accounts.views.send_mail')
+    def test_sends_link_to_login_using_token_uid(self, mock_send_mail):
+        self.client.post('/accounts/send_login_email', data={
+            'email' : 'edithi@example.com',
+        })
+        token = Token.objects.first()
+        expected_url = f'http://testserver/accounts/login?token={token.uid}'
+        (subject, body, from_email, to_list), kwargs = mock_send_mail.call_args
+        self.assertIn(expected_url, body)
+
+
+
+class LoginViewTest(TestCase):
+    def test_redirects_to_home_page(self):
+        response = self.client.get('/accounts/login?token=abcd123')
+        self.assertRedirects(response ,'/')
 
