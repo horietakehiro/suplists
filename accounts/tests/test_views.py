@@ -65,10 +65,12 @@ class LoginViewTest(TestCase):
         self.assertRedirects(response ,'/')
 
     def test_calls_authenticaticate_with_uid_from_get_request(self, mock_auth):
+        
         self.client.get('/accounts/login?token=abcd123')
+        # request = self.client.request().wsgi_request
         self.assertEqual(
             mock_auth.authenticate.call_args,
-            call(uid='abcd123')
+            call(request=None, uid='abcd123')
         )
 
     def test_calls_auth_login_with_user_if_there_is_one(self, mock_auth):
