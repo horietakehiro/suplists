@@ -14,7 +14,7 @@ class MylistsTest(FunctionalTest):
         session.save()
         ## to set a cokkie we need to first visit the domain.
         ## 404 pages load the quickest!
-        self.driver.get(self.my_live_server_url + '/404_no_such_url/')
+        self.driver.get(self.my_live_server_url + '404_no_such_url/')
         self.driver.add_cookie(
             dict(name=settings.SESSION_COOKIE_NAME,
             value=session.session_key,
