@@ -76,7 +76,7 @@ AUTHENTICATION_BACKENDS = [
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'superlist.test@gmail.com'
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD', 'superlists123')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 

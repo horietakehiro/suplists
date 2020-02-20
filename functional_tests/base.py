@@ -45,7 +45,7 @@ class FunctionalTest(StaticLiveServerTestCase):
     def setUp(self):
         self.staging_server = os.environ.get('STAGING_SERVER')
         if self.staging_server:
-            self.my_live_server_url = 'http://' + self.staging_server + '/'
+            self.my_live_server_url = 'http://' + self.staging_server + ':' +  str(self.port) + '/'
 
             reset_database(self.staging_server)
         

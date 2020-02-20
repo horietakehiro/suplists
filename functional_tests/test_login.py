@@ -81,7 +81,7 @@ class LoginTest(FunctionalTest):
         self.assertIn(tmp_url, url)
 
         # She clicks it
-        if len(url_splitted) == 3:
+        if len(url_splitted) == 3 and self.staging_server:
             port = url_splitted[-1][:-1]
 
             head, tail = url.split('/accounts/login?token=')

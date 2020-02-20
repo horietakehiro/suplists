@@ -3,11 +3,12 @@ from .base import FunctionalTest
 from .server_tools import create_session_on_server
 from .management.commands.create_session import create_preauthenticated_session
 
+import sys
 
 class MylistsTest(FunctionalTest):
     def create_pre_authenticated_session(self, email):
         if self.staging_server:
-            session_key = create_session_on_server(self.my_live_server_url, email)
+            session_key = create_session_on_server(self.staging_server, email)
         else:
             session_key = create_preauthenticated_session(email)
 
