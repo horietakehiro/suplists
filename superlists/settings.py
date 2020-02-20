@@ -24,7 +24,6 @@ LOGGING = {
     'loggers' : {
         'django' : {
             'handlers' : ['console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
     },
     'root' : {'level' : 'INFO'},
@@ -67,6 +66,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'lists',
     'accounts',
+    'functional_tests'
 ]
 
 AUTH_USER_MODEL = 'accounts.User'

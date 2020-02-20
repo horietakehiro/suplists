@@ -12,6 +12,8 @@ import time
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from unittest import skip
 
+from .server_tools import reset_database
+
 MAX_WAIT=10
 
 def wait(fn):
@@ -41,9 +43,11 @@ class FunctionalTest(StaticLiveServerTestCase):
     driver = None
 
     def setUp(self):
-        staging_server = os.environ.get('STAGING_SERVER')
-        if staging_server:
-            self.my_live_server_url = 'http://' + staging_server
+        self.staging_server = os.environ.get('STAGING_SERVER')
+        if self.staging_server:
+            self.my_live_server_url = 'http://' + self.staging_server + '/'
+
+            reset_database(self.staging_server)
         
         if self.driver is None:
             self.driver = webdriver.Remote(
