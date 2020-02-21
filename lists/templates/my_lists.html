@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block header_text %}My Lists{% endblock  list_form%}
+{% block header_text %}My Lists{% endblock %}
 
 {% block list_form %}{% endblock  %}
 
@@ -11,4 +11,4 @@
             <li><a href="{{ list.get_absolute_url }}">{{ list.name }}</a></li>
         {% endfor %}
     </ul>
-{% endblock  %}
+{% endblock %}
