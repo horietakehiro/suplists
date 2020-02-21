@@ -35,3 +35,6 @@ def new_list(request):
 
     else:
         return render(request, 'home.html', {'form' : form})
+
+def my_lists(request, email):
+    return render(request, 'my_lists.html')
