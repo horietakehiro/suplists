@@ -43,7 +43,7 @@ class FunctionalTest(StaticLiveServerTestCase):
     if is_local:
         my_live_server_url = 'http://localhost:9090/'
     else:
-        my_live_server_url = FunctionalTest.live_server_url
+        my_live_server_url = 'http://localhost:8888/'
 
     driver = None
 
@@ -62,7 +62,7 @@ class FunctionalTest(StaticLiveServerTestCase):
                 )
             else:
                 self.driver = webdriver.Firefox()
-                
+
 
     def tearDown(self):
         self.driver.quit()
