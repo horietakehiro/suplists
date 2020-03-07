@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -15,6 +16,10 @@ from unittest import skip
 from .server_tools import reset_database
 
 MAX_WAIT=10
+
+SCREEN_DUMP_LOCATION = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), 'screendumps',
+)
 
 def wait(fn):
     def modified_fn(*args, **kwargs):
@@ -42,7 +47,7 @@ class FunctionalTest(StaticLiveServerTestCase):
     if is_local:
         port = 8888
         host = '0.0.0.0'
-        my_live_server_url = 'http://localhost:9090/'
+        my_live_server_url = 'http://localhost:9999/'
     else:
         my_live_server_url = None
 
@@ -69,10 +74,44 @@ class FunctionalTest(StaticLiveServerTestCase):
 
 
     def tearDown(self):
+        if self._test_has_failed():
+            if not os.path.exists(SCREEN_DUMP_LOCATION):
+                os.makedirs(SCREEN_DUMP_LOCATION)
+            for ix, handle in enumerate(self.driver.window_handles):
+                self._windowid = ix
+                self.driver.switch_to_window(handle)
+                self.take_screenshot()
+                self.dump_html()
+
         self.driver.quit()
         self.driver = None
+        super().tearDown()
 
 
+    def _test_has_failed(self):
+        # slightly obscure but counlD'nt fund a better way.
+        return any(error for (method, error) in self._outcome.errors)
+
+    def take_screenshot(self):
+        filename = self._get_filename() + '.png'
+        print('screenshotting to ', filename)
+        self.driver.get_screenshot_as_file(filename)
+
+    def dump_html(self):
+        filename = self._get_filename() + '.html'
+        print('dumping page HTML to', filename)
+        with open(filename, 'w') as f:
+            f.write(self.driver.page_source)
+
+    def _get_filename(self):
+        timestamp = datetime.now().isoformat().replace(':', '.')[:19]
+        return '{folder}/{classname}.{method}-window{window}-{timestamp}'.format(
+            folder=SCREEN_DUMP_LOCATION,
+            classname=self.__class__.__name__,
+            method=self._testMethodName,
+            window=self._windowid,
+            timestamp=timestamp,
+        )
     @wait
     def wait_for_row_in_list_rable(self, row_text):
         table = self.driver.find_element_by_id('id_list_table')

@@ -20,6 +20,8 @@ MAX_WAIT=10
 
 class NewVisitorTest(FunctionalTest):
 
+    def test_screenshot(self):
+        self.fail()
 
     def test_can_start_a_list_for_one_user(self):
         # get the home page of new to-do app.
