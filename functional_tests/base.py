@@ -50,7 +50,7 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     def setUp(self):
         if self.my_live_server_url is None:
-            self.my_live_server_url = self.live_server_url
+            self.my_live_server_url = self.live_server_url + '/'
         
         self.staging_server = os.environ.get('STAGING_SERVER')
         if self.staging_server:
