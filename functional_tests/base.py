@@ -43,11 +43,14 @@ class FunctionalTest(StaticLiveServerTestCase):
     if is_local:
         my_live_server_url = 'http://localhost:9090/'
     else:
-        my_live_server_url = 'http://localhost:8888/'
+        my_live_server_url = None
 
     driver = None
 
     def setUp(self):
+        if self.my_live_server_url is None:
+            self.my_live_server_url = self.live_server_url
+        
         self.staging_server = os.environ.get('STAGING_SERVER')
         if self.staging_server:
             self.my_live_server_url = 'http://' + self.staging_server + ':' +  str(self.port) + '/'
