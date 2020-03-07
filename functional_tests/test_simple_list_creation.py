@@ -78,10 +78,15 @@ class NewVisitorTest(FunctionalTest):
         # we use a new browser session to make sure that
         # no inofrmation of edith is coming from cookie etc
         self.driver.quit() 
-        self.driver  = webdriver.Remote(
-            command_executor=f'http://{addr}/wd/hub',
-            options=option,
-        )
+
+        if self.is_local:
+            self.driver  = webdriver.Remote(
+                command_executor=f'http://{addr}/wd/hub',
+                options=option,
+            )
+        else:
+            self.driver = webdriver.Firefox()
+
 
 
         # Francis visits the home page.
