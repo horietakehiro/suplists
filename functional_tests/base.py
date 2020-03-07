@@ -35,12 +35,13 @@ class FunctionalTest(StaticLiveServerTestCase):
     # selenium server is running outside the container , and
     # port forward mapping cannot be changed dynamically
     # port = 8080
-    port = 8888
-    host = '0.0.0.0'
+
 
     # Don't change original "live_server_url" atttribute
     is_local = False
     if is_local:
+        port = 8888
+        host = '0.0.0.0'
         my_live_server_url = 'http://localhost:9090/'
     else:
         my_live_server_url = None
