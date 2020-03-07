@@ -39,7 +39,11 @@ class FunctionalTest(StaticLiveServerTestCase):
     host = '0.0.0.0'
 
     # Don't change original "live_server_url" atttribute
-    my_live_server_url = 'http://localhost:9090/'
+    is_local = False
+    if is_local:
+        my_live_server_url = 'http://localhost:9090/'
+    else:
+        my_live_server_url = FunctionalTest.live_server_url
 
     driver = None
 
@@ -51,10 +55,14 @@ class FunctionalTest(StaticLiveServerTestCase):
             reset_database(self.staging_server)
         
         if self.driver is None:
-            self.driver = webdriver.Remote(
-                command_executor=f'http://{addr}/wd/hub',
-                options=option,
-            )
+            if self.is_local:
+                self.driver = webdriver.Remote(
+                    command_executor=f'http://{addr}/wd/hub',
+                    options=option,
+                )
+            else:
+                self.driver = webdriver.Firefox()
+                
 
     def tearDown(self):
         self.driver.quit()
