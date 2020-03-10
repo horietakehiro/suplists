@@ -1,6 +1,9 @@
 from selenium import webdriver
 from .base import FunctionalTest
 import os
+from .list_page import ListPage
+from .my_lists_page import MyListsPage
+
 addr = os.environ.get('SSA')
 option = webdriver.FirefoxOptions()
 
@@ -33,14 +36,37 @@ class SharingTest(FunctionalTest):
         # Edith goes to the home page and starts a lisst
         self.driver = edith_driver
         self.driver.get(self.my_live_server_url)
-        self.add_list_item('Get help')
+        list_page = ListPage(self).add_list_item('Get help')
 
         # She notices that a "Share this list" option
-        share_box = self.driver.find_element_by_css_selector(
-            'input[name="sharee"]'
-        )
+        share_box = list_page.get_share_box()
         self.assertEqual(
             share_box.get_attribute('placeholder'),
             'yout-friend@example.com',
         )
+
+        # She shares her list.
+        #  The page updates to say that it's shared with Oniferous:
+        list_page.share_list_with('oniciferous@example.com')
+
+
+        #Oniciferous now goes to the lists page with his driver
+        self.driver = oni_driver
+        MyListsPage(self).go_to_my_lists_page()
+
+        # he sees Edith's list in there!
+        self.driver.find_element_by_link_text('Get help').click()
+
+        #On the list page, Oniciferous can see says that it's Edith's list
+        self.wait_for(lambda : self.assertEqual(
+            list_page.get_list_owner(),
+            'edith@example.com'
+        ))
+        #He adds an item to the list
+        list_page.add_list_item('Hi Edith!')
+
+        #When Edith refreshes the page, she sees Oniciferous's addition
+        self.driver = edith_driver
+        self.driver.refresh()
+        list_page.wait_for_row_in_list_table('Hi Edith!', 2)
         
