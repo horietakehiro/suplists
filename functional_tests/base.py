@@ -4,6 +4,10 @@ from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
+from .management.commands.create_session import create_preauthenticated_session
+from .server_tools import create_session_on_server
+from django.conf import settings
+
 addr = os.environ.get('SSA')
 option = webdriver.FirefoxOptions()
 
@@ -35,7 +39,21 @@ def wait(fn):
 
 # class NewVisitorTest(LiveServerTestCase):
 class FunctionalTest(StaticLiveServerTestCase):
+    def create_pre_authenticated_session(self, email):
+        if self.staging_server:
+            session_key = create_session_on_server(self.staging_server, email)
+        else:
+            session_key = create_preauthenticated_session(email)
 
+        ## to set a cokkie we need to first visit the domain.
+        ## 404 pages load the quickest!
+        self.driver.get(self.my_live_server_url + '404_no_such_url/')
+        self.driver.add_cookie(
+            dict(name=settings.SESSION_COOKIE_NAME,
+            value=session_key,
+            path='/',
+            )
+        )
     # define live_server_url by myself beause 
     # selenium server is running outside the container , and
     # port forward mapping cannot be changed dynamically
@@ -43,7 +61,7 @@ class FunctionalTest(StaticLiveServerTestCase):
 
 
     # Don't change original "live_server_url" atttribute
-    is_local = False
+    is_local = os.environ.get('IS_LOCAL', False)
     if is_local:
         port = 8888
         host = '0.0.0.0'
