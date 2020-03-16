@@ -35,6 +35,7 @@ class SharingTest(FunctionalTest):
 
         # Edith goes to the home page and starts a lisst
         self.driver = edith_driver
+        print(self.my_live_server_url)
         self.driver.get(self.my_live_server_url)
         list_page = ListPage(self).add_list_item('Get help')
 
@@ -42,7 +43,7 @@ class SharingTest(FunctionalTest):
         share_box = list_page.get_share_box()
         self.assertEqual(
             share_box.get_attribute('placeholder'),
-            'yout-friend@example.com',
+            'your-friend@example.com',
         )
 
         # She shares her list.

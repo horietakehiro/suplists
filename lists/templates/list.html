@@ -13,3 +13,10 @@
     </table>
 {% endblock %}
 
+{% block extra_content %}
+    <form method="POST" action="{% url 'share' list.id %}">
+        <input name="sharee" type="sharee" placeholder="your-friend@example.com"/>
+        {% csrf_token %}
+    </form>
+{% endblock  %}
+

@@ -52,3 +52,5 @@ class NewListForm(ItemForm):
             return List.create_new(first_item_text=self.cleaned_data['text'])
 
 
+class ShareListForm(ItemForm):
+    pass

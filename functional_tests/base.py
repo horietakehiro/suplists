@@ -39,21 +39,7 @@ def wait(fn):
 
 # class NewVisitorTest(LiveServerTestCase):
 class FunctionalTest(StaticLiveServerTestCase):
-    def create_pre_authenticated_session(self, email):
-        if self.staging_server:
-            session_key = create_session_on_server(self.staging_server, email)
-        else:
-            session_key = create_preauthenticated_session(email)
 
-        ## to set a cokkie we need to first visit the domain.
-        ## 404 pages load the quickest!
-        self.driver.get(self.my_live_server_url + '404_no_such_url/')
-        self.driver.add_cookie(
-            dict(name=settings.SESSION_COOKIE_NAME,
-            value=session_key,
-            path='/',
-            )
-        )
     # define live_server_url by myself beause 
     # selenium server is running outside the container , and
     # port forward mapping cannot be changed dynamically
@@ -71,6 +57,22 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     driver = None
 
+    def create_pre_authenticated_session(self, email):
+        if self.staging_server:
+            session_key = create_session_on_server(self.staging_server, email)
+        else:
+            session_key = create_preauthenticated_session(email)
+
+        ## to set a cokkie we need to first visit the domain.
+        ## 404 pages load the quickest!
+        self.driver.get(self.my_live_server_url + '404_no_such_url/')
+        self.driver.add_cookie(
+            dict(name=settings.SESSION_COOKIE_NAME,
+            value=session_key,
+            path='/',
+            )
+        )
+        
     def setUp(self):
         if self.my_live_server_url is None:
             self.my_live_server_url = self.live_server_url + '/'
