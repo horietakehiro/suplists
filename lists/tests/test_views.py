@@ -246,6 +246,24 @@ class MyListsTest(TestCase):
         response = self.client.get('/lists/users/a@b.com/')
         self.assertEqual(response.context['owner'], correct_user)
 
+    def test_return_shared_lists_too(self):
+        user1 = User.objects.create(email='a@a.com')
+        self.client.post('/lists/new', data={'text' : 'new item'})
+        list_ = List.objects.first()
+        email = 'b@b.com'
+        self.client.post(
+            f'/lists/{list_.id}/share',
+            data={'sharee' : email},
+        )
+        response = self.client.get(f'/lists/users/{email}/')
+        self.assertIn('shared_lists', response.context.keys())
+        self.assertIn(
+            'new item',
+             [list_.name for list_ in response.context['shared_lists']]
+        )
+
+    
+
 class ShareListViewTest(TestCase):
 
     def test_post_redirects_to_lists_page(self):

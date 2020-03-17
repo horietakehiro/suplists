@@ -5,9 +5,9 @@
         <meta http-equiv="X-UA-Compatible", content="IE-edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>To-Do lists</title>
+        
         <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="/static/base.css">
-
     </head>
     <body>
         <div class="container">
@@ -70,11 +70,16 @@
             </div>
             <div class="row">
                 <div class="col-md-6 col-md-offset-3">
+                    {% block share_status %}
+                    {% endblock  %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
                     {% block extra_content %}
                     {% endblock  %}
                 </div>
             </div>
-            
         </div>
         <script src="/static/jquery-3.4.1.min.js"></script>
         <script src="/static/list.js"></script>

@@ -54,12 +54,14 @@ def new_list(request):
 
 def my_lists(request, email):
     owner = User.objects.get(email=email)
-    return render(request, 'my_lists.html', {'owner' : owner})
+    lists = List.objects.filter(shared_with=owner)
+    return render(
+        request, 
+        'my_lists.html',
+        {'owner' : owner, 'shared_lists' : lists}
+    )
 
 def share_list(request, list_id):
-
-
-    print('--------',request.POST)
 
     list_ = List.objects.get(id=list_id)
     try:
